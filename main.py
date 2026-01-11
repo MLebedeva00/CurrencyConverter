@@ -1,6 +1,9 @@
 import os
 import requests
 from dotenv import load_dotenv
+import tkinter as tk
+from tkinter import ttk, messagebox
+
 
 # загружаем переменные из .env
 load_dotenv()
@@ -10,40 +13,83 @@ API_KEY = os.getenv("API_KEY")
 
 # проверяем, есть ли ключ
 if not API_KEY:
-    print("Ошибка: API-ключ не найден. Проверьте файл .env")
+    messagebox.showerror("Ошибка: API-ключ не найден. Проверьте файл .env")
     exit()
-else:
-    print("API-ключ загружен успешно!")
 
-# Запрашиваем у пользователя данные для конвертации
-base_currency = input("Введите код исходной валюты: ").upper()
-target_currency = input("Введите код целевой валюты: ").upper()
-amount = float(input("Введите сумму для конвертации: "))
+# Функция для получения списка валют
+def get_currency_list():
+    url = f"https://v6.exchangerate-api.com/v6/{API_KEY}/latest/USD"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()  # ответ на наш запрос в формате данных json (похоже на словарь)
+        return list(data["conversion_rates"].keys())
+    else:
+        messagebox.showerror(title="Ошибка", message="Не удалось получить список валют")
+        return []
 
-# Формируем url для запроса
-url = f"https://v6.exchangerate-api.com/v6/{API_KEY}/latest/{base_currency}"
+# Функция для конвертации валют
+def convert_currency():
+    base_currency = base_currency_var.get()
+    target_currency = target_currency_var.get()
+    amount = amount_entry.get()
 
-#Делаем запрос к API
-response = requests.get(url)
+    # выбор валют происходит через выпадающие списки
+    # ввод суммы через текстовое поле
 
-if response.status_code == 200:
-    data = response.json()  # ответ на наш запрос в формате данных json (похоже на словарь)
+    if not amount.isdigit():
+        messagebox.showerror(title="Ошибка", message="Введите сумму корректно")
+        return
 
-    # Проверяем, успешен ли ответ
-    if data['result'] == 'success':
-        print("API-ключ работает!")
+    amount = float(amount)
+    url = f"https://v6.exchangerate-api.com/v6/{API_KEY}/latest/{base_currency}"
+    response = requests.get(url)
 
-        # Проверяем, есть ли нужная валюта в списке
+    if response.status_code == 200:
+        data = response.json()
+
         if target_currency in data['conversion_rates']:
             rate = data['conversion_rates'][target_currency]
             converted_amount = amount * rate
-            print(f"{amount} {base_currency} = {converted_amount:.2f} {target_currency}")
+            result_label.config(text=f"{amount} {base_currency} = {converted_amount:.2f} {target_currency}")
         else:
-            print("Ошибка. Валюта не найдена в базе API")
+            messagebox.showerror(title="Ошибка", message="Целевая валюта не найдена")
 
     else:
-        print("Ошибка: API не смог обработать запрос. Проверьте код валюты")
+        messagebox.showerror(title="Ошибка", message="Не удалось получить данные с API")
 
-else:
-    print(f"Ошибка: API не отвечает. Код состояния {response.status_code}")
-    print(f"Сообщение от сервера: {response.text}")
+
+# Создаеем главное окно
+root = tk.Tk()
+root.title("Конвертер валют")
+root.geometry("400x300")
+root.resizable(width=False, height=False)
+
+# Получаем список валют
+currencies = get_currency_list()
+
+# Поля ввода и выпадающие списки
+tk.Label(root, text="Сумма: ").pack()  # метка с надписью сумма, pack размещает элемент на экране
+amount_entry = tk.Entry(root)   # поле для ввода суммы
+amount_entry.pack()
+
+# создадим выпадающие списки
+tk.Label(root, text="Исходная валюта: ").pack()
+base_currency_var = tk.StringVar(value="USD")  # хранит выбранную валюту
+base_currency_menu = ttk.Combobox(root, textvariable=base_currency_var, values=currencies)
+base_currency_menu.pack()
+
+tk.Label(root, text="Целевая валюта: ").pack()
+target_currency_var = tk.StringVar(value="EUR")
+target_currency_menu = ttk.Combobox(root, textvariable=target_currency_var, values=currencies)
+target_currency_menu.pack()
+
+# Кнопка для конвертации
+convert_button = tk.Button(root, text="Конвертировать", command=convert_currency)
+convert_button.pack()
+
+# Поле для вывода результата
+result_label = tk.Label(root, text="", font=("Arial", 12))
+result_label.pack()
+
+# Запуск главного цикла Tkinter
+root.mainloop()
