@@ -63,29 +63,30 @@ root = tk.Tk()
 root.title("Конвертер валют")
 root.geometry("400x300")
 root.resizable(width=False, height=False)
+#root.config(bg="#E3D9F2")
 
 # Получаем список валют
 currencies = get_currency_list()
 
 # Поля ввода и выпадающие списки
-tk.Label(root, text="Сумма: ").pack()  # метка с надписью сумма, pack размещает элемент на экране
+tk.Label(root, text="Сумма: ", bg="#B8B8B8").pack(pady=(15, 0))  # метка с надписью сумма, pack размещает элемент на экране
 amount_entry = tk.Entry(root)   # поле для ввода суммы
-amount_entry.pack()
+amount_entry.pack(pady=(3, 0))
 
 # создадим выпадающие списки
-tk.Label(root, text="Исходная валюта: ").pack()
+tk.Label(root, text="Исходная валюта: ", bg="#B8B8B8").pack(pady=(12, 3))
 base_currency_var = tk.StringVar(value="USD")  # хранит выбранную валюту
 base_currency_menu = ttk.Combobox(root, textvariable=base_currency_var, values=currencies)
 base_currency_menu.pack()
 
-tk.Label(root, text="Целевая валюта: ").pack()
+tk.Label(root, text="Целевая валюта: ", bg="#B8B8B8").pack(pady=(12, 3))
 target_currency_var = tk.StringVar(value="EUR")
 target_currency_menu = ttk.Combobox(root, textvariable=target_currency_var, values=currencies)
 target_currency_menu.pack()
 
 # Кнопка для конвертации
-convert_button = tk.Button(root, text="Конвертировать", command=convert_currency)
-convert_button.pack()
+convert_button = tk.Button(root, text="Конвертировать", command=convert_currency, bg="#66B2FF", activebackground="#939393")
+convert_button.pack(pady=(10, 3))
 
 # Поле для вывода результата
 result_label = tk.Label(root, text="", font=("Arial", 12))
