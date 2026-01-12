@@ -120,38 +120,47 @@ def convert_tempreture(base_temp, target_temp, num):
     if base_temp == "Fahrenheit" and target_temp == "Fahrenheit":
         converted_num = num
         result_label2.config(text=f"{num} {base_temp} = {converted_num:.2f} {target_temp}")
+        return converted_num
 
     elif (base_temp == "Fahrenheit") and (target_temp == "Celsius"):
         converted_num = (num - 32) * (5 / 9)
         result_label2.config(text=f"{num} {base_temp} = {converted_num:.2f} {target_temp}")
+        return converted_num
 
     elif (base_temp == "Fahrenheit") and (target_temp == "Kelvin"):
         converted_num = (num + 459.67) * (5 / 9)
         result_label2.config(text=f"{num} {base_temp} = {converted_num:.2f} {target_temp}")
+        return converted_num
 
     elif (base_temp == "Celsius") and (target_temp == "Fahrenheit"):
         converted_num = (num * 1.8) + 32
         result_label2.config(text=f"{num} {base_temp} = {converted_num:.2f} {target_temp}")
+        return converted_num
 
     elif (base_temp == "Celsius") and (target_temp == "Celsius"):
         converted_num = num
         result_label2.config(text=f"{num} {base_temp} = {converted_num:.2f} {target_temp}")
+        return converted_num
 
     elif (base_temp == "Celsius") and (target_temp == "Kelvin"):
         converted_num = num + 273
         result_label2.config(text=f"{num} {base_temp} = {converted_num:.2f} {target_temp}")
+        return converted_num
 
     elif (base_temp == "Kelvin") and (target_temp == "Fahrenheit"):
         converted_num = 1.8 * (num - 273) + 32
         result_label2.config(text=f"{num} {base_temp} = {converted_num:.2f} {target_temp}")
+        return converted_num
 
     elif (base_temp == "Kelvin") and (target_temp == "Celsius"):
         converted_num = num - 273
         result_label2.config(text=f"{num} {base_temp} = {converted_num:.2f} {target_temp}")
+        return converted_num
 
     elif (base_temp == "Kelvin") and (target_temp == "Kelvin"):
         converted_num = num
         result_label2.config(text=f"{num} {base_temp} = {converted_num:.2f} {target_temp}")
+        return converted_num
 
 
 # Создаеем главное окно
