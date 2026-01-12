@@ -11,7 +11,9 @@
 
 Структура проекта:
 
-main.py - приложение
+scr
+
+- main.py - приложение
 
 example.env - файл для хранения вашего API-ключа, необходим для работы приложения
 
@@ -24,7 +26,7 @@ README.md - описание проекта.
   - Наличие плагина, поддерживающего файлы .env (.env files support в Pycharm)
   - Библиотеки: requests, python-dotenv (в терминале pip install requests python-dotenv)
 
--Загрузите main.py и example.env
+-Загрузите main.py из папки scr и example.env
 
 -Отредактируйте example.env:
 
