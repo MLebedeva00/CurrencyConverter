@@ -5,3 +5,7 @@
 5. Add a graphical interface
 6. Improve app design
 7. Add Temperature Converter
+8. Refactor code to write tests for ci.yml
+9. Add tests for ci.yml
+10. Add ci.yml
+11. Fix tests and ci.yml
